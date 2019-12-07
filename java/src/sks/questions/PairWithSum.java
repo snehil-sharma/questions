@@ -1,4 +1,5 @@
-//Find all unique pairs in given list which equal to given sum
+//Find all unique pairs in the given [unsorted] list which equals to the given sum.
+//T(n) = O(n)
 package sks.questions;
 
 import java.util.ArrayList;
@@ -23,26 +24,26 @@ public class PairWithSum {
 	
 	public static ArrayList<Pairs> getPairs(int[] arr, int sum){
 		ArrayList<Pairs> al = new ArrayList<>();
-		HashMap<Integer, Integer> hm = new HashMap<>();
+		HashMap<Integer, Boolean> hm = new HashMap<>();
 		int comp;	// complement = sum - value
 		
 		for(int i=0; i<arr.length; i++) {
 			comp = sum - arr[i];
 			if(hm.containsKey(arr[i])) {
-				if(hm.get(arr[i]) == 1) {
+				if(hm.get(arr[i]) == false) {
 					al.add(new Pairs(comp, arr[i]));
-					hm.put(arr[i],2);
+					hm.put(arr[i],true);
 				}
 			}
 			else
 				if(!hm.containsKey(comp))
-					hm.put(comp, 1);
+					hm.put(comp, false);
 		}
 		return al;
 	}
 
 	public static void main(String[] args) {
-		int[] arr = {1,1,2,4,4,4,4,7,1,1,7,7,6,7,6,7,2};
+		int[] arr = {1,1,2,4,4,4,4,7,1,1,7,7,-1,6,7,6,9,7,2};
 		int sum = 8;
 		System.out.println(getPairs(arr, sum));
 	}
