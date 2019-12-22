@@ -1,8 +1,8 @@
-//Find all unique pairs in the given [unsorted] list which equals to the given sum.
-//T(n) = O(n)
-package sks.questions;
+//Find all unique pairs in the given list which equals to the given sum.
+package sks.questions.general;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class PairWithSum {
@@ -22,7 +22,10 @@ public class PairWithSum {
 		}
 	}
 	
-	public static ArrayList<Pairs> getPairs(int[] arr, int sum){
+	//For Unsorted Array; T(n) = O(n)
+	private static ArrayList<Pairs> getPairs1(int[] arr, int sum){
+		if(arr == null || arr.length < 2)
+			throw new IllegalArgumentException();	//Unchecked Exception i.e. subclass of RuntimeException or Error
 		ArrayList<Pairs> al = new ArrayList<>();
 		HashMap<Integer, Boolean> hm = new HashMap<>();
 		int comp;	// complement = sum - value
@@ -41,11 +44,40 @@ public class PairWithSum {
 		}
 		return al;
 	}
+	
+	//Only for Sorted Array then; T(n) = O(n) otherwise T(n) = T(n) of sorting algorithm used.
+	//This is running faster then getPairs1 even with sorting? => Because of very small size of array.
+	private static ArrayList<Pairs> getPairs2(int arr[], int sum){
+		if(arr == null || arr.length < 2)
+			throw new IllegalArgumentException();
+		ArrayList<Pairs> al = new ArrayList<>();
+		int i = 0, j = arr.length-1;
+		
+		while(i<j) {
+			if(arr[i] + arr[j] == sum) {
+				al.add(new Pairs(arr[i], arr[j]));
+				do {i++;} while(i<arr.length && arr[i-1] == arr[i]);
+				do {j--;} while(j>=0 && arr[j] == arr[j+1]);
+			}
+			else if(arr[i] + arr[j] < sum)
+				do {i++;} while(i<arr.length && arr[i-1] == arr[i]);
+			else
+				do {j--;} while(j>=0 && arr[j] == arr[j+1]);
+		}
+		return al;
+	}
 
 	public static void main(String[] args) {
 		int[] arr = {1,1,2,4,4,4,4,7,1,1,7,7,-1,6,7,6,9,7,2};
 		int sum = 8;
-		System.out.println(getPairs(arr, sum));
+		long start = System.nanoTime();
+		System.out.println(getPairs1(arr, sum));
+		System.out.println("getPairs1: " + (System.nanoTime() - start) +" ns");
+		
+		start = System.nanoTime();
+		Arrays.sort(arr);
+		System.out.println("\n" + getPairs2(arr, sum));
+		System.out.println("getPairs2: " + (System.nanoTime() - start) +" ns");
 	}
 
 }
