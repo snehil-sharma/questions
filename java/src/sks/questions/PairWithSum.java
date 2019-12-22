@@ -1,5 +1,5 @@
 //Find all unique pairs in the given list which equals to the given sum.
-package sks.questions.general;
+package sks.questions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
